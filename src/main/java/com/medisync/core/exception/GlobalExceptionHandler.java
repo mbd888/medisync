@@ -80,6 +80,23 @@ public class GlobalExceptionHandler {
     }
 
     /**
+     * Handle ResourceNotFoundException.
+     * Thrown when a requested resource is not found.
+     * Returns 404 NOT FOUND status.
+     */
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleResourceNotFound(ResourceNotFoundException ex) {
+        ErrorResponse error = ErrorResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.NOT_FOUND.value())
+                .error(HttpStatus.NOT_FOUND.getReasonPhrase())
+                .message(ex.getMessage())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
+    /**
      * Handle all other unexpected exceptions.
      * Catches any exception not handled by specific handlers above.
      * Returns 500 INTERNAL SERVER ERROR.
