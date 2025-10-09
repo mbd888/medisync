@@ -6,12 +6,15 @@ import com.medisync.core.auth.dto.RegisterRequest;
 import com.medisync.core.exception.InvalidCredentialsException;
 import com.medisync.core.exception.UserAlreadyExistsException;
 import com.medisync.core.user.entity.User;
+import com.medisync.core.user.enums.Role;
 import com.medisync.core.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import com.medisync.core.patient.entity.Patient;
+import com.medisync.core.doctor.entity.Doctor;
 
 /**
  * Service handling authentication operations: registration and login.
@@ -49,21 +52,38 @@ public class AuthService {
             );
         }
 
-        // Create new user with hashed password
-        var user = User.builder()
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword())) // Hash the password
-                .role(request.getRole())
-                .isActive(true)
-                .build();
+        User user;
+
+        // Create Patient or Doctor based on role
+        if (request.getRole() == Role.PATIENT) {
+            user = Patient.builder()
+                    .email(request.getEmail())
+                    .password(passwordEncoder.encode(request.getPassword()))
+                    .role(request.getRole())
+                    .isActive(true)
+                    .build();
+        } else if (request.getRole() == Role.DOCTOR) {
+            user = Doctor.builder()
+                    .email(request.getEmail())
+                    .password(passwordEncoder.encode(request.getPassword()))
+                    .role(request.getRole())
+                    .isActive(true)
+                    .build();
+        } else {
+            // For ADMIN, NURSE - create base User
+            user = User.builder()
+                    .email(request.getEmail())
+                    .password(passwordEncoder.encode(request.getPassword()))
+                    .role(request.getRole())
+                    .isActive(true)
+                    .build();
+        }
 
         // Save to database
         userRepository.save(user);
 
-        // Generate JWT token
+        // Rest of the method stays the same...
         var jwtToken = jwtService.generateToken(user);
-
-        // Return response
         return AuthResponse.builder()
                 .token(jwtToken)
                 .email(user.getEmail())
