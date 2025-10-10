@@ -97,6 +97,23 @@ public class GlobalExceptionHandler {
     }
 
     /**
+     * Handle AppointmentNotFoundException.
+     * Thrown when a requested appointment is not found.
+     * Returns 404 NOT FOUND status.
+     */
+    @ExceptionHandler(AppointmentNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleAppointmentNotFound(AppointmentNotFoundException ex) {
+        ErrorResponse error = ErrorResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.NOT_FOUND.value())
+                .error(HttpStatus.NOT_FOUND.getReasonPhrase())
+                .message(ex.getMessage())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
+    /**
      * Handle all other unexpected exceptions.
      * Catches any exception not handled by specific handlers above.
      * Returns 500 INTERNAL SERVER ERROR.

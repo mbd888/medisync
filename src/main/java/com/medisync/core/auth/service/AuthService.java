@@ -82,7 +82,6 @@ public class AuthService {
         // Save to database
         userRepository.save(user);
 
-        // Rest of the method stays the same...
         var jwtToken = jwtService.generateToken(user);
         return AuthResponse.builder()
                 .token(jwtToken)
@@ -99,7 +98,7 @@ public class AuthService {
      */
     public AuthResponse login(LoginRequest request) {
         try {
-            // Authenticate user - this will throw exception if credentials are invalid
+            // Authenticate user
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             request.getEmail(),
