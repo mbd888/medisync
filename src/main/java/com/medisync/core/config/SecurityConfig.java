@@ -52,6 +52,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // Public endpoints - no authentication required
                         .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/doctors/*/available-slots").permitAll()
 
                         // All other endpoints require authentication
                         .anyRequest().authenticated()

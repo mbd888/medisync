@@ -114,6 +114,40 @@ public class GlobalExceptionHandler {
     }
 
     /**
+     * Handle ScheduleConflictException.
+     * Thrown when trying to book a time slot that's already taken.
+     * Returns 409 CONFLICT status.
+     */
+    @ExceptionHandler(ScheduleConflictException.class)
+    public ResponseEntity<ErrorResponse> handleScheduleConflict(ScheduleConflictException ex) {
+        ErrorResponse error = ErrorResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.CONFLICT.value())
+                .error(HttpStatus.CONFLICT.getReasonPhrase())
+                .message(ex.getMessage())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+    }
+
+    /**
+     * Handle DoctorNotAvailableException.
+     * Thrown when trying to book outside doctor's working hours.
+     * Returns 400 BAD REQUEST status.
+     */
+    @ExceptionHandler(DoctorNotAvailableException.class)
+    public ResponseEntity<ErrorResponse> handleDoctorNotAvailable(DoctorNotAvailableException ex) {
+        ErrorResponse error = ErrorResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.BAD_REQUEST.value())
+                .error(HttpStatus.BAD_REQUEST.getReasonPhrase())
+                .message(ex.getMessage())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
+
+    /**
      * Handle all other unexpected exceptions.
      * Catches any exception not handled by specific handlers above.
      * Returns 500 INTERNAL SERVER ERROR.

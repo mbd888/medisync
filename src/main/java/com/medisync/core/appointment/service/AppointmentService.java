@@ -11,6 +11,7 @@ import com.medisync.core.exception.AppointmentNotFoundException;
 import com.medisync.core.exception.ResourceNotFoundException;
 import com.medisync.core.patient.entity.Patient;
 import com.medisync.core.patient.repository.PatientRepository;
+import com.medisync.core.schedule.service.SchedulingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +35,7 @@ public class AppointmentService {
     private final AppointmentRepository appointmentRepository;
     private final PatientRepository patientRepository;
     private final DoctorRepository doctorRepository;
+    private final SchedulingService schedulingService;
 
     /**
      * Book a new appointment.
@@ -59,6 +61,21 @@ public class AppointmentService {
 
         // Calculate end time (default 30 minutes)
         LocalTime endTime = request.getStartTime().plusMinutes(30);
+
+        // VALIDATION: Check if doctor is available at this time
+        schedulingService.isDoctorAvailable(
+                doctor.getId(),
+                request.getAppointmentDate(),
+                request.getStartTime()
+        );
+
+        // VALIDATION: Check for scheduling conflicts
+        schedulingService.hasConflict(
+                doctor.getId(),
+                request.getAppointmentDate(),
+                request.getStartTime(),
+                endTime
+        );
 
         // Create appointment
         Appointment appointment = Appointment.builder()
