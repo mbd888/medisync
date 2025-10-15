@@ -343,6 +343,7 @@ Clean architecture pays off. Since I began Java in AP Computer Science, I would 
 DTOs are your friend. When I added fields to the User entity for patients vs doctors, none of my existing API contracts broke because DTOs acted as a buffer. That separation turned what could have been a messy refactor into a simple, confident change.
 Enterprise Java is different. Coming into this, I knew Java essentials. But Spring's dependency injection, JPA relationships, transaction management, and method-level security are the tools that let you build systems that scale. I went from "I can write Java" to "I can architect a Spring Boot application."
 After writing the conflict detection algorithm, I was satisfied to see it correctly reject a double-booking attempt with a clear error message. I felt that this served a good hands-on lesson of real-world complexity in production systems.
+
 ---
 
 ## Contributing
