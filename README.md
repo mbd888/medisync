@@ -336,12 +336,17 @@ DoctorSchedule defines Doctor's working hours
 ## What I Learned
 
 I built MediSync to understand what "enterprise-grade" really means beyond just making something that works. This project pushed me to think like an engineer: not just writing code, but architecting systems that could actually handle real users, real data, and real consequences.
+
 The biggest lessons:
-Security isn't optional. Working with healthcare data made me realize how much thought goes into protecting user information. Implementing JWT properly, understanding why BCrypt matters, and designing role-based authorization taught me that security has to be implemented from day one.
+
+**Security isn't optional.** Working with healthcare data made me realize how much thought goes into protecting user information. Implementing JWT properly, understanding why BCrypt matters, and designing role-based authorization taught me that security has to be implemented from day one.
 Business logic gets complex fast. The scheduling system looked simple on paper: "book an appointment." But preventing double-bookings, respecting doctor availability, validating time slots made me think through edge cases in depth. This is where I had to leverage creative problem solving.
-Clean architecture pays off. Since I began Java in AP Computer Science, I would wonder why we need to separate controllers, services, and repositories when one class could do it all. But when I needed to add smart scheduling validation to appointment booking, I just plugged it into the service layer without touching controllers or repositories. That's when the SOLID principles clicked for me.
-DTOs are your friend. When I added fields to the User entity for patients vs doctors, none of my existing API contracts broke because DTOs acted as a buffer. That separation turned what could have been a messy refactor into a simple, confident change.
-Enterprise Java is different. Coming into this, I knew Java essentials. But Spring's dependency injection, JPA relationships, transaction management, and method-level security are the tools that let you build systems that scale. I went from "I can write Java" to "I can architect a Spring Boot application."
+
+**Clean architecture pays off.** Since I began Java in AP Computer Science, I would wonder why we need to separate controllers, services, and repositories when one class could do it all. But when I needed to add smart scheduling validation to appointment booking, I just plugged it into the service layer without touching controllers or repositories. That's when the SOLID principles clicked for me.
+
+**DTOs are your friend.** When I added fields to the User entity for patients vs doctors, none of my existing API contracts broke because DTOs acted as a buffer. That separation turned what could have been a messy refactor into a simple, confident change.
+
+**Enterprise Java is different.** Coming into this, I knew Java essentials. But Spring's dependency injection, JPA relationships, transaction management, and method-level security are the tools that let you build systems that scale. I went from "I can write Java" to "I can architect a Spring Boot application."
 After writing the conflict detection algorithm, I was satisfied to see it correctly reject a double-booking attempt with a clear error message. I felt that this served a good hands-on lesson of real-world complexity in production systems.
 
 ---
