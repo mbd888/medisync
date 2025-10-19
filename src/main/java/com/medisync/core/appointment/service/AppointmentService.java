@@ -220,10 +220,17 @@ public class AppointmentService {
      * @return simplified appointment DTO for lists
      */
     private AppointmentListDTO mapToListDTO(Appointment appointment) {
-        String patientName = appointment.getPatient().getFirstName() + " " +
-                appointment.getPatient().getLastName();
-        String doctorName = "Dr. " + appointment.getDoctor().getFirstName() + " " +
-                appointment.getDoctor().getLastName();
+        String patientFirstName = appointment.getPatient().getFirstName() != null ?
+                appointment.getPatient().getFirstName() : "Unknown";
+        String patientLastName = appointment.getPatient().getLastName() != null ?
+                appointment.getPatient().getLastName() : "";
+        String patientName = patientFirstName + " " + patientLastName;
+
+        String doctorFirstName = appointment.getDoctor().getFirstName() != null ?
+                appointment.getDoctor().getFirstName() : "Unknown";
+        String doctorLastName = appointment.getDoctor().getLastName() != null ?
+                appointment.getDoctor().getLastName() : "";
+        String doctorName = "Dr. " + doctorFirstName + " " + doctorLastName;
 
         return AppointmentListDTO.builder()
                 .id(appointment.getId())
