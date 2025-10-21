@@ -1,92 +1,79 @@
-import { useState } from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
+import Login from './pages/auth/Login';
+import Register from './pages/auth/Register';
+import PatientDashboard from './pages/patient/PatientDashboard';
+import DoctorDashboard from './pages/doctor/DoctorDashboard';
+import MyAppointments from './pages/patient/MyAppointments';
+import BookAppointment from './pages/patient/BookAppointment';
 
-function App() {
-    const { login, user, logout } = useAuth();
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [message, setMessage] = useState('');
+// Protected Route component
+function ProtectedRoute({ children, allowedRole }) {
+    const { user, loading } = useAuth();
 
-    const handleLogin = async (e) => {
-        e.preventDefault();
-        setMessage('Logging in...');
-
-        const result = await login(email, password);
-
-        if (result.success) {
-            setMessage('✅ Login successful!');
-        } else {
-            setMessage('❌ ' + result.error);
-        }
-    };
-
-    if (user) {
-        return (
-            <div className="min-h-screen flex items-center justify-center bg-gray-100">
-                <div className="card max-w-md w-full">
-                    <h1 className="text-3xl font-bold text-primary-600 mb-4">
-                        🏥 MediSync
-                    </h1>
-                    <div className="mb-4 p-4 bg-green-100 text-green-800 rounded-lg">
-                        <p className="font-semibold">Logged in as:</p>
-                        <p>{user.email}</p>
-                        <p className="text-sm">Role: {user.role}</p>
-                    </div>
-                    <button onClick={logout} className="btn-secondary w-full">
-                        Logout
-                    </button>
-                </div>
-            </div>
-        );
+    if (loading) {
+        return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
     }
 
+    if (!user) {
+        return <Navigate to="/login" />;
+    }
+
+    if (allowedRole && user.role !== allowedRole) {
+        return <Navigate to="/login" />;
+    }
+
+    return children;
+}
+
+function App() {
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-100">
-            <div className="card max-w-md w-full">
-                <h1 className="text-3xl font-bold text-primary-600 mb-4">
-                    🏥 MediSync
-                </h1>
-                <p className="text-gray-600 mb-6">
-                    Test Login (Use existing account)
-                </p>
+        <BrowserRouter>
+            <Routes>
+                {/* Public routes */}
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
 
-                <form onSubmit={handleLogin} className="space-y-4">
-                    <div>
-                        <label className="block text-sm font-medium mb-2">Email</label>
-                        <input
-                            type="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            className="input-field"
-                            placeholder="patient1@test.com"
-                            required
-                        />
-                    </div>
+                {/* Patient routes */}
+                <Route
+                    path="/patient/dashboard"
+                    element={
+                        <ProtectedRoute allowedRole="PATIENT">
+                            <PatientDashboard />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/patient/appointments"
+                    element={
+                        <ProtectedRoute allowedRole="PATIENT">
+                            <MyAppointments />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/patient/book-appointment"
+                    element={
+                        <ProtectedRoute allowedRole="PATIENT">
+                            <BookAppointment />
+                        </ProtectedRoute>
+                    }
+                />
 
-                    <div>
-                        <label className="block text-sm font-medium mb-2">Password</label>
-                        <input
-                            type="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            className="input-field"
-                            placeholder="password123"
-                            required
-                        />
-                    </div>
+                {/* Doctor routes */}
+                <Route
+                    path="/doctor/dashboard"
+                    element={
+                        <ProtectedRoute allowedRole="DOCTOR">
+                            <DoctorDashboard />
+                        </ProtectedRoute>
+                    }
+                />
 
-                    {message && (
-                        <div className="p-3 bg-gray-100 rounded-lg text-sm">
-                            {message}
-                        </div>
-                    )}
-
-                    <button type="submit" className="btn-primary w-full">
-                        Test Login
-                    </button>
-                </form>
-            </div>
-        </div>
+                {/* Default redirect */}
+                <Route path="/" element={<Navigate to="/login" />} />
+            </Routes>
+        </BrowserRouter>
     );
 }
 

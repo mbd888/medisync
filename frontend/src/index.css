@@ -1,3 +1,5 @@
+@import 'react-datepicker/dist/react-datepicker.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -24,4 +26,25 @@
     .card {
         @apply bg-white rounded-lg shadow-md p-6;
     }
+}
+
+/* DatePicker Customization */
+.react-datepicker {
+    font-family: inherit;
+    border: 2px solid #e5e7eb;
+    border-radius: 0.5rem;
+}
+
+.react-datepicker__day--disabled {
+    color: #d1d5db !important;
+    cursor: not-allowed !important;
+}
+
+.react-datepicker__day--selected {
+    background-color: #3b82f6 !important;
+    color: white !important;
+}
+
+.react-datepicker__day:hover:not(.react-datepicker__day--disabled) {
+    background-color: #dbeafe !important;
 }
