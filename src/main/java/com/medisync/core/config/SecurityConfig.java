@@ -48,11 +48,22 @@ public class SecurityConfig {
                 // Disable CSRF - not needed for stateless JWT authentication
                 .csrf(AbstractHttpConfigurer::disable)
 
+                .cors(cors -> cors.configurationSource(request -> {
+                    var corsConfig = new org.springframework.web.cors.CorsConfiguration();
+                    corsConfig.setAllowedOrigins(java.util.List.of("http://localhost:5173"));
+                    corsConfig.setAllowedMethods(java.util.List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+                    corsConfig.setAllowedHeaders(java.util.List.of("*"));
+                    corsConfig.setAllowCredentials(true);
+                    return corsConfig;
+                }))
+
                 // Configure authorization rules
                 .authorizeHttpRequests(auth -> auth
                         // Public endpoints - no authentication required
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/doctors/*/available-slots").permitAll()
+                        .requestMatchers("/api/doctors").permitAll()
+                        .requestMatchers("/api/doctors/*/schedule").permitAll()
 
                         // All other endpoints require authentication
                         .anyRequest().authenticated()

@@ -3,6 +3,7 @@ package com.medisync.core.schedule.controller;
 import com.medisync.core.schedule.dto.AvailableSlotDTO;
 import com.medisync.core.schedule.dto.CreateScheduleRequest;
 import com.medisync.core.schedule.dto.DoctorScheduleDTO;
+import com.medisync.core.schedule.entity.DoctorSchedule;
 import com.medisync.core.schedule.service.SchedulingService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * REST Controller for doctor schedule management.
@@ -144,5 +146,29 @@ public class DoctorScheduleController {
     ) {
         List<AvailableSlotDTO> slots = schedulingService.getAvailableSlots(doctorId, date);
         return ResponseEntity.ok(slots);
+    }
+
+    /**
+     * Get doctor's schedule (public endpoint for patients to see working days).
+     * GET /api/doctors/{doctorId}/schedule
+     */
+    @GetMapping("/api/doctors/{doctorId}/schedule")
+    public ResponseEntity<List<DoctorScheduleDTO>> getDoctorSchedule(@PathVariable Long doctorId) {
+        List<DoctorSchedule> schedules = schedulingService.getDoctorSchedulesByDoctorId(doctorId);
+
+        List<DoctorScheduleDTO> scheduleDTOs = schedules.stream()
+                .map(schedule -> DoctorScheduleDTO.builder()
+                        .id(schedule.getId())
+                        .dayOfWeek(schedule.getDayOfWeek())
+                        .startTime(schedule.getStartTime())
+                        .endTime(schedule.getEndTime())
+                        .slotDuration(schedule.getSlotDuration())
+                        .isAvailable(schedule.getIsAvailable())
+                        .createdAt(schedule.getCreatedAt())
+                        .updatedAt(schedule.getUpdatedAt())
+                        .build())
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(scheduleDTOs);
     }
 }

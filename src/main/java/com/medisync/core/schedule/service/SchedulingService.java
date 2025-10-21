@@ -89,6 +89,17 @@ public class SchedulingService {
     }
 
     /**
+     * Get all schedules for a doctor by doctor ID (public access).
+     *
+     * @param doctorId doctor's ID
+     * @return list of schedules
+     */
+    @Transactional(readOnly = true)
+    public List<DoctorSchedule> getDoctorSchedulesByDoctorId(Long doctorId) {
+        return scheduleRepository.findByDoctor_Id(doctorId);
+    }
+
+    /**
      * Delete a schedule.
      *
      * @param scheduleId schedule ID

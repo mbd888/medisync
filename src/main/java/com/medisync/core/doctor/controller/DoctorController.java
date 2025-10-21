@@ -2,13 +2,18 @@ package com.medisync.core.doctor.controller;
 
 import com.medisync.core.doctor.dto.DoctorProfileDTO;
 import com.medisync.core.doctor.dto.UpdateDoctorProfileRequest;
+import com.medisync.core.doctor.repository.DoctorRepository;
 import com.medisync.core.doctor.service.DoctorService;
+import com.medisync.core.doctor.entity.Doctor;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import java.util.stream.Collectors;
+import java.util.List;
+
 
 /**
  * REST Controller for doctor profile endpoints.
@@ -25,6 +30,7 @@ import org.springframework.web.bind.annotation.*;
 public class DoctorController {
 
     private final DoctorService doctorService;
+    private final DoctorRepository doctorRepository;
 
     /**
      * Get current doctor's profile.
@@ -92,5 +98,35 @@ public class DoctorController {
 
         DoctorProfileDTO updatedProfile = doctorService.updateProfile(email, request);
         return ResponseEntity.ok(updatedProfile);
+    }
+
+    /**
+     * Get all doctors (public endpoint for patients to browse).
+     * GET /api/doctors
+     * Response: List of doctor profiles
+     */
+    @GetMapping
+    public ResponseEntity<List<DoctorProfileDTO>> getAllDoctors() {
+        List<Doctor> doctors = doctorRepository.findAll();
+
+        List<DoctorProfileDTO> doctorDTOs = doctors.stream()
+                .map(doctor -> DoctorProfileDTO.builder()
+                        .id(doctor.getId())
+                        .email(doctor.getEmail())
+                        .role(doctor.getRole())
+                        .firstName(doctor.getFirstName())
+                        .lastName(doctor.getLastName())
+                        .phone(doctor.getPhone())
+                        .specialization(doctor.getSpecialization())
+                        .licenseNumber(doctor.getLicenseNumber())
+                        .qualification(doctor.getQualification())
+                        .yearsOfExperience(doctor.getYearsOfExperience())
+                        .bio(doctor.getBio())
+                        .createdAt(doctor.getCreatedAt())
+                        .updatedAt(doctor.getUpdatedAt())
+                        .build())
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(doctorDTOs);
     }
 }
