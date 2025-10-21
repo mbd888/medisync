@@ -261,7 +261,7 @@ export default function BookAppointment() {
                                     placeholderText="Select a date"
                                     className="input-field w-full"
                                     dateFormat="MMMM d, yyyy"
-                                 showMonthYearDropdown/>
+                                />
                                 {formData.doctorId && doctorSchedule.length === 0 && (
                                     <p className="text-sm text-red-600 mt-2">
                                         ⚠️ This doctor has no schedule set yet
