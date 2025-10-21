@@ -4,6 +4,7 @@ import { useAuth } from '../../context/AuthContext';
 import { appointmentApi } from '../../api/appointmentApi';
 import { profileApi } from '../../api/profileApi';
 import DatePicker from 'react-datepicker';
+import { format, parse } from 'date-fns';
 import 'react-datepicker/dist/react-datepicker.css';
 
 export default function BookAppointment() {
@@ -125,6 +126,17 @@ export default function BookAppointment() {
         } finally {
             setLoading(false);
         }
+    };
+
+    const formatTime12Hour = (timeString) => {
+        if (!timeString) return '';
+
+        // Parse the time string (assumes format like "14:30:00" or "14:30")
+        const parsedTime = parse(timeString, timeString.includes(':')
+        && timeString.split(':').length === 3 ? 'HH:mm:ss' : 'HH:mm', new Date());
+
+        // Format to 12-hour time with AM/PM
+        return format(parsedTime, 'h:mm a');
     };
 
     return (
@@ -298,7 +310,7 @@ export default function BookAppointment() {
                                                     : 'border-gray-200 hover:border-primary-300'
                                             }`}
                                         >
-                                            {slot.startTime}
+                                            {formatTime12Hour(slot.startTime)}
                                         </button>
                                     ))}
                             </div>

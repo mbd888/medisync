@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { appointmentApi } from '../../api/appointmentApi';
+import { format, parse } from 'date-fns';
 
 export default function MyAppointments() {
     const { user, logout } = useAuth();
@@ -44,6 +45,17 @@ export default function MyAppointments() {
     const handleLogout = () => {
         logout();
         navigate('/login');
+    };
+
+    const formatTime12Hour = (timeString) => {
+        if (!timeString) return '';
+
+        // Parse the time string (assumes format like "14:30:00" or "14:30")
+        const parsedTime = parse(timeString, timeString.includes(':')
+        && timeString.split(':').length === 3 ? 'HH:mm:ss' : 'HH:mm', new Date());
+
+        // Format to 12-hour time with AM/PM
+        return format(parsedTime, 'h:mm a');
     };
 
     const getStatusBadge = (status) => {
@@ -149,7 +161,7 @@ export default function MyAppointments() {
                                             </div>
                                             <div className="flex items-center gap-2">
                                                 <span className="font-medium">⏰ Time:</span>
-                                                <span>{appointment.startTime} - {appointment.endTime}</span>
+                                                <span>{formatTime12Hour(appointment.startTime)} - {formatTime12Hour(appointment.endTime)}</span>
                                             </div>
                                             {appointment.reason && (
                                                 <div className="flex items-center gap-2">
