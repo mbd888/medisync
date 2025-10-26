@@ -29,24 +29,7 @@ public class LabReportController {
 
     private final LabReportService labReportService;
 
-    /**
-     * Upload a lab report file to a medical record.
-     * POST /api/medical-records/{id}/lab-reports
-     * Authorization: Bearer <doctor_token>
-     * Content-Type: multipart/form-data
-     * Form data:
-     * - file: PDF/image file
-     * - testName: Name of the test
-     * - resultSummary: Optional summary
-     *
-     * @param id medical record ID
-     * @param authentication Spring Security authentication
-     * @param file uploaded file
-     * @param testName name of the test
-     * @param resultSummary optional summary of results
-     * @return created lab report metadata
-     * @throws IOException if file upload fails
-     */
+    // Upload a lab report
     @PostMapping("/api/medical-records/{id}/lab-reports")
     @PreAuthorize("hasRole('DOCTOR')")
     public ResponseEntity<LabReportDTO> uploadLabReport(
@@ -63,14 +46,7 @@ public class LabReportController {
         return ResponseEntity.status(HttpStatus.CREATED).body(labReport);
     }
 
-    /**
-     * Get all lab reports for a medical record.
-     * GET /api/medical-records/{id}/lab-reports
-     * Authorization: Bearer <token>
-     *
-     * @param id medical record ID
-     * @return list of lab reports
-     */
+    // Get all lab reports for a medical record
     @GetMapping("/api/medical-records/{id}/lab-reports")
     @PreAuthorize("hasAnyRole('PATIENT', 'DOCTOR')")
     public ResponseEntity<List<LabReportDTO>> getLabReports(@PathVariable Long id) {
@@ -78,16 +54,7 @@ public class LabReportController {
         return ResponseEntity.ok(labReports);
     }
 
-    /**
-     * Download a lab report file.
-     * GET /api/lab-reports/{id}/download
-     * Authorization: Bearer <token>
-     * Returns the file with appropriate Content-Disposition header.
-     *
-     * @param id lab report ID
-     * @param authentication Spring Security authentication
-     * @return file as downloadable resource
-     */
+    // Download a lab report file
     @GetMapping("/api/lab-reports/{id}/download")
     @PreAuthorize("hasAnyRole('PATIENT', 'DOCTOR')")
     public ResponseEntity<Resource> downloadLabReport(

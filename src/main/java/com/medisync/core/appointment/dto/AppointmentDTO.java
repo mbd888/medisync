@@ -13,7 +13,6 @@ import java.time.LocalTime;
 /**
  * Full DTO for appointment details.
  * Used when getting a specific appointment or after booking.
- * Includes nested patient and doctor information.
  */
 @Data
 @Builder
@@ -29,10 +28,7 @@ public class AppointmentDTO {
     private String reason;
     private String notes;
 
-    // Nested patient info
     private PatientInfo patient;
-
-    // Nested doctor info
     private DoctorInfo doctor;
 
     private LocalDateTime createdAt;

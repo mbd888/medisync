@@ -12,7 +12,6 @@ import java.time.LocalTime;
 /**
  * Simplified DTO for listing appointments.
  * Used when getting a list of appointments.
- * Less detail than full AppointmentDTO for better performance.
  */
 @Data
 @Builder

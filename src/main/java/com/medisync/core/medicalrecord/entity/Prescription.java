@@ -14,12 +14,6 @@ import java.time.LocalDateTime;
  * Prescription entity representing medication prescribed to a patient.
  * Belongs to a MedicalRecord (created during a visit).
  * Contains medication details, dosage, frequency, and instructions.
- * Example:
- * - Medication: Amoxicillin
- * - Dosage: 500mg
- * - Frequency: 3 times daily
- * - Duration: 7 days
- * - Instructions: Take with food
  */
 @Data
 @Builder
@@ -42,16 +36,16 @@ public class Prescription {
     private String medicationName;
 
     @Column(nullable = false, length = 100)
-    private String dosage; // e.g., "500mg", "10ml"
+    private String dosage;
 
     @Column(nullable = false, length = 100)
-    private String frequency; // e.g., "twice daily", "every 6 hours"
+    private String frequency;
 
     @Column(length = 50)
-    private String duration; // e.g., "7 days", "2 weeks"
+    private String duration;
 
     @Column(length = 500)
-    private String instructions; // e.g., "Take with food", "Avoid alcohol"
+    private String instructions;
 
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)

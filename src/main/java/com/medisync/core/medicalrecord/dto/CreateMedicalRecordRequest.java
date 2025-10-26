@@ -9,18 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
-/**
- * DTO for creating a medical record.
- * Doctor sends this after completing an appointment:
- * POST /api/medical-records
- * {
- *   "appointmentId": 1,
- *   "diagnosis": "Common Cold",
- *   "symptoms": "Fever, cough, sore throat",
- *   "notes": "Rest and plenty of fluids recommended",
- *   "followUpDate": "2025-11-01"
- * }
- */
+// DTO for creating a new medical record.
 @Data
 @Builder
 @NoArgsConstructor

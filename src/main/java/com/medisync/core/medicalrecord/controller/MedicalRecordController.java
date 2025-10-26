@@ -28,24 +28,7 @@ public class MedicalRecordController {
 
     private final MedicalRecordService medicalRecordService;
 
-    /**
-     * Create a medical record after an appointment.
-     * POST /api/medical-records
-     * Authorization: Bearer <doctor_token>
-     * Content-Type: application/json
-     * Request body:
-     * {
-     *   "appointmentId": 1,
-     *   "diagnosis": "Common Cold",
-     *   "symptoms": "Fever, cough",
-     *   "notes": "Rest recommended",
-     *   "followUpDate": "2025-11-01"
-     * }
-     *
-     * @param authentication Spring Security authentication
-     * @param request medical record details
-     * @return created medical record
-     */
+    // Create a new medical record after an appointment
     @PostMapping("/api/medical-records")
     @PreAuthorize("hasRole('DOCTOR')")
     public ResponseEntity<MedicalRecordDTO> createMedicalRecord(
@@ -57,15 +40,7 @@ public class MedicalRecordController {
         return ResponseEntity.status(HttpStatus.CREATED).body(record);
     }
 
-    /**
-     * Get a specific medical record by ID.
-     * GET /api/medical-records/{id}
-     * Authorization: Bearer <token>
-     *
-     * @param id medical record ID
-     * @param authentication Spring Security authentication
-     * @return medical record with prescriptions and lab reports
-     */
+    // Get a specific medical record by ID
     @GetMapping("/api/medical-records/{id}")
     @PreAuthorize("hasAnyRole('PATIENT', 'DOCTOR')")
     public ResponseEntity<MedicalRecordDTO> getMedicalRecord(
@@ -77,15 +52,7 @@ public class MedicalRecordController {
         return ResponseEntity.ok(record);
     }
 
-    /**
-     * Get all medical records for the current patient.
-     * GET /api/patients/medical-records
-     * Authorization: Bearer <patient_token>
-     * Response: List of medical records (simplified view)
-     *
-     * @param authentication Spring Security authentication
-     * @return list of patient's medical records
-     */
+    // Get all medical records created by the current patient.
     @GetMapping("/api/patients/medical-records")
     @PreAuthorize("hasRole('PATIENT')")
     public ResponseEntity<List<MedicalRecordListDTO>> getPatientMedicalRecords(
@@ -96,15 +63,7 @@ public class MedicalRecordController {
         return ResponseEntity.ok(records);
     }
 
-    /**
-     * Get all medical records created by the current doctor.
-     * GET /api/doctors/medical-records
-     * Authorization: Bearer <doctor_token>
-     * Response: List of medical records (simplified view)
-     *
-     * @param authentication Spring Security authentication
-     * @return list of doctor's medical records
-     */
+    // Get all medical records created by the current doctor.
     @GetMapping("/api/doctors/medical-records")
     @PreAuthorize("hasRole('DOCTOR')")
     public ResponseEntity<List<MedicalRecordListDTO>> getDoctorMedicalRecords(

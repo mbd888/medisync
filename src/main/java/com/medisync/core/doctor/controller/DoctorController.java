@@ -32,24 +32,7 @@ public class DoctorController {
     private final DoctorService doctorService;
     private final DoctorRepository doctorRepository;
 
-    /**
-     * Get current doctor's profile.
-     * GET /api/doctors/profile
-     * Authorization: Bearer <token>
-     * Response (200 OK):
-     * {
-     *   "id": 1,
-     *   "email": "doctor@test.com",
-     *   "role": "DOCTOR",
-     *   "firstName": "Jane",
-     *   "lastName": "Smith",
-     *   "specialization": "Cardiology",
-     *   ...
-     * }
-     *
-     * @param authentication Spring Security authentication object (contains user email)
-     * @return doctor profile
-     */
+    // Get current doctor's profile
     @GetMapping("/profile")
     @PreAuthorize("hasRole('DOCTOR')")
     public ResponseEntity<DoctorProfileDTO> getProfile(Authentication authentication) {
@@ -60,51 +43,21 @@ public class DoctorController {
         return ResponseEntity.ok(profile);
     }
 
-    /**
-     * Update current doctor's profile.
-     * PUT /api/doctors/profile
-     * Authorization: Bearer <token>
-     * Content-Type: application/json
-     * Request body (all fields optional):
-     * {
-     *   "firstName": "Jane",
-     *   "lastName": "Smith",
-     *   "phone": "1234567890",
-     *   "specialization": "Cardiology",
-     *   "licenseNumber": "MD123456",
-     *   ...
-     * }
-     * Response (200 OK):
-     * {
-     *   "id": 1,
-     *   "email": "doctor@test.com",
-     *   "firstName": "Jane",
-     *   "lastName": "Smith",
-     *   ...
-     * }
-     *
-     * @param authentication Spring Security authentication object
-     * @param request update request with new values
-     * @return updated doctor profile
-     */
+    // Update current doctor's profile
     @PutMapping("/profile")
     @PreAuthorize("hasRole('DOCTOR')")
     public ResponseEntity<DoctorProfileDTO> updateProfile(
             Authentication authentication,
             @Valid @RequestBody UpdateDoctorProfileRequest request
     ) {
-        // Get email from JWT token
+
         String email = authentication.getName();
 
         DoctorProfileDTO updatedProfile = doctorService.updateProfile(email, request);
         return ResponseEntity.ok(updatedProfile);
     }
 
-    /**
-     * Get all doctors (public endpoint for patients to browse).
-     * GET /api/doctors
-     * Response: List of doctor profiles
-     */
+    // Get all doctors
     @GetMapping
     public ResponseEntity<List<DoctorProfileDTO>> getAllDoctors() {
         List<Doctor> doctors = doctorRepository.findAll();

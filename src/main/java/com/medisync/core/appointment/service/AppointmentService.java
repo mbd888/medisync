@@ -37,39 +37,28 @@ public class AppointmentService {
     private final DoctorRepository doctorRepository;
     private final SchedulingService schedulingService;
 
-    /**
-     * Book a new appointment.
-     *
-     * @param patientEmail email of the patient booking (from JWT)
-     * @param request booking details (doctor, date, time, reason)
-     * @return created appointment DTO
-     * @throws ResourceNotFoundException if patient or doctor not found
-     */
+    // Book a new appointment
     @Transactional
     public AppointmentDTO bookAppointment(String patientEmail, BookAppointmentRequest request) {
-        // Find patient by email
+
         Patient patient = patientRepository.findByEmail(patientEmail)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Patient not found with email: " + patientEmail
                 ));
 
-        // Find doctor by ID
         Doctor doctor = doctorRepository.findById(request.getDoctorId())
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Doctor not found with id: " + request.getDoctorId()
                 ));
 
-        // Calculate end time (default 30 minutes)
         LocalTime endTime = request.getStartTime().plusMinutes(30);
 
-        // VALIDATION: Check if doctor is available at this time
         schedulingService.isDoctorAvailable(
                 doctor.getId(),
                 request.getAppointmentDate(),
                 request.getStartTime()
         );
 
-        // VALIDATION: Check for scheduling conflicts
         schedulingService.hasConflict(
                 doctor.getId(),
                 request.getAppointmentDate(),
@@ -88,17 +77,11 @@ public class AppointmentService {
                 .reason(request.getReason())
                 .build();
 
-        // Save and return
         Appointment savedAppointment = appointmentRepository.save(appointment);
         return mapToFullDTO(savedAppointment);
     }
 
-    /**
-     * Get all appointments for a patient.
-     *
-     * @param patientEmail patient's email
-     * @return list of appointments
-     */
+    // Get all appointments for a patient/doctor.
     @Transactional(readOnly = true)
     public List<AppointmentListDTO> getPatientAppointments(String patientEmail) {
         List<Appointment> appointments = appointmentRepository.findByPatient_Email(patientEmail);
@@ -107,12 +90,6 @@ public class AppointmentService {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Get all appointments for a doctor.
-     *
-     * @param doctorEmail doctor's email
-     * @return list of appointments
-     */
     @Transactional(readOnly = true)
     public List<AppointmentListDTO> getDoctorAppointments(String doctorEmail) {
         List<Appointment> appointments = appointmentRepository.findByDoctor_Email(doctorEmail);
@@ -121,15 +98,7 @@ public class AppointmentService {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Get a specific appointment by ID.
-     *
-     * @param id appointment ID
-     * @param userEmail email of the user requesting (for security check)
-     * @return appointment DTO
-     * @throws AppointmentNotFoundException if appointment not found
-     * @throws SecurityException if user doesn't have access to this appointment
-     */
+    // Get a specific appointment by ID.
     @Transactional(readOnly = true)
     public AppointmentDTO getAppointmentById(Long id, String userEmail) {
         Appointment appointment = appointmentRepository.findById(id)
@@ -137,7 +106,6 @@ public class AppointmentService {
                         "Appointment not found with id: " + id
                 ));
 
-        // Security check: user must be either the patient or the doctor
         boolean isPatient = appointment.getPatient().getEmail().equals(userEmail);
         boolean isDoctor = appointment.getDoctor().getEmail().equals(userEmail);
 
@@ -148,15 +116,7 @@ public class AppointmentService {
         return mapToFullDTO(appointment);
     }
 
-    /**
-     * Cancel an appointment.
-     *
-     * @param id appointment ID
-     * @param userEmail email of the user cancelling
-     * @return cancelled appointment DTO
-     * @throws AppointmentNotFoundException if appointment not found
-     * @throws SecurityException if user doesn't have permission to cancel
-     */
+    // Cancel an appointment by ID.
     @Transactional
     public AppointmentDTO cancelAppointment(Long id, String userEmail) {
         Appointment appointment = appointmentRepository.findById(id)
@@ -164,7 +124,6 @@ public class AppointmentService {
                         "Appointment not found with id: " + id
                 ));
 
-        // Security check: user must be either the patient or the doctor
         boolean isPatient = appointment.getPatient().getEmail().equals(userEmail);
         boolean isDoctor = appointment.getDoctor().getEmail().equals(userEmail);
 
@@ -172,19 +131,13 @@ public class AppointmentService {
             throw new SecurityException("You don't have permission to cancel this appointment");
         }
 
-        // Update status to CANCELLED
         appointment.setStatus(Appointment.AppointmentStatus.CANCELLED);
         Appointment cancelledAppointment = appointmentRepository.save(appointment);
 
         return mapToFullDTO(cancelledAppointment);
     }
 
-    /**
-     * Convert Appointment entity to full AppointmentDTO.
-     *
-     * @param appointment appointment entity
-     * @return appointment DTO with all details
-     */
+    // Convert Appointment entity to full AppointmentDTO.
     private AppointmentDTO mapToFullDTO(Appointment appointment) {
         return AppointmentDTO.builder()
                 .id(appointment.getId())
@@ -213,12 +166,7 @@ public class AppointmentService {
                 .build();
     }
 
-    /**
-     * Convert Appointment entity to simplified AppointmentListDTO.
-     *
-     * @param appointment appointment entity
-     * @return simplified appointment DTO for lists
-     */
+    // Convert Appointment entity to simplified AppointmentListDTO.
     private AppointmentListDTO mapToListDTO(Appointment appointment) {
         String patientFirstName = appointment.getPatient().getFirstName() != null ?
                 appointment.getPatient().getFirstName() : "Unknown";

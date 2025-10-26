@@ -59,8 +59,6 @@ public class User implements UserDetails {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    // Spring Security UserDetails methods
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         // Convert role to Spring Security authority
@@ -70,7 +68,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        // Use email as username for authentication
+        // Use email as a username for authentication
         return email;
     }
 

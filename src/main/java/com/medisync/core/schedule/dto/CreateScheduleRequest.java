@@ -12,14 +12,7 @@ import java.time.LocalTime;
 
 /**
  * DTO for creating a doctor's work schedule.
- * Doctor sends this to set their working hours:
- * POST /api/doctors/schedule
- * {
- *   "dayOfWeek": "MONDAY",
- *   "startTime": "09:00",
- *   "endTime": "17:00",
- *   "slotDuration": 30
- * }
+ * Doctor sends this to set their working hours.
  */
 @Data
 @Builder

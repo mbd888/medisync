@@ -10,15 +10,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * DTO for registration requests.
- * This is what the user sends when registering:
- * {
- *   "email": "patient@test.com",
- *   "password": "password123",
- *   "role": "PATIENT"
- * }
- */
+// DTO for registering new users.
 @Data
 @Builder
 @NoArgsConstructor

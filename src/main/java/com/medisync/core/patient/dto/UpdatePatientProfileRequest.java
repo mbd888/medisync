@@ -10,13 +10,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
-/**
- * DTO for updating patient profile.
- * Patient sends this when updating their profile:
- * PUT /api/patients/profile
- * All fields are optional - patient can update only what they want.
- * Validation ensures data quality when provided.
- */
+// DTO for updating patient profile
 @Data
 @Builder
 @NoArgsConstructor

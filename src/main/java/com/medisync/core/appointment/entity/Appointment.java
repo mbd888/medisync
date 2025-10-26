@@ -20,10 +20,6 @@ import java.time.LocalTime;
  * Relationships:
  * - ManyToOne with Patient (many appointments can belong to one patient)
  * - ManyToOne with Doctor (many appointments can be assigned to one doctor)
- * Business rules:
- * - appointmentDate must be in the future
- * - Default duration is 30 minutes
- * - Status starts as SCHEDULED
  */
 @Data
 @Builder
@@ -63,7 +59,7 @@ public class Appointment {
     private String reason;
 
     @Column(length = 1000)
-    private String notes; // Doctor's notes after appointment
+    private String notes;
 
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
@@ -73,13 +69,10 @@ public class Appointment {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    /**
-     * Enum for appointment status.
-     */
     public enum AppointmentStatus {
-        SCHEDULED,   // Appointment is booked
-        COMPLETED,   // Patient came and appointment finished
-        CANCELLED,   // Cancelled by patient or doctor
-        NO_SHOW      // Patient didn't show up
+        SCHEDULED,
+        COMPLETED,
+        CANCELLED,
+        NO_SHOW
     }
 }

@@ -14,9 +14,6 @@ import java.time.LocalDateTime;
  * LabReport entity representing an uploaded test result or medical report.
  * Belongs to a MedicalRecord.
  * Stores file information for uploaded documents (blood tests, X-rays, etc.)
- * File storage:
- * - Development: Local file system
- * - Production: AWS S3 (or similar cloud storage)
  */
 @Data
 @Builder
@@ -39,19 +36,19 @@ public class LabReport {
     private String testName; // e.g., "Blood Test", "X-Ray Chest", "MRI Brain"
 
     @Column(name = "file_name", nullable = false, length = 255)
-    private String fileName; // Original file name
+    private String fileName;
 
     @Column(name = "file_path", nullable = false, length = 500)
-    private String filePath; // Where file is stored on disk/cloud
+    private String filePath;
 
     @Column(name = "file_type", length = 50)
-    private String fileType; // e.g., "application/pdf", "image/jpeg"
+    private String fileType;
 
     @Column(name = "file_size")
-    private Long fileSize; // Size in bytes
+    private Long fileSize;
 
     @Column(name = "result_summary", length = 1000)
-    private String resultSummary; // Optional text summary of results
+    private String resultSummary; // Optional
 
     @CreatedDate
     @Column(name = "uploaded_at", nullable = false, updatable = false)

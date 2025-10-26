@@ -12,11 +12,5 @@ import java.util.List;
 @Repository
 public interface PrescriptionRepository extends JpaRepository<Prescription, Long> {
 
-    /**
-     * Find all prescriptions for a specific medical record.
-     *
-     * @param medicalRecordId medical record ID
-     * @return list of prescriptions
-     */
     List<Prescription> findByMedicalRecord_Id(Long medicalRecordId);
 }

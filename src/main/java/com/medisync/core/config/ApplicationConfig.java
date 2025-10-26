@@ -27,41 +27,17 @@ public class ApplicationConfig {
 
     private final UserRepository userRepository;
 
-    /**
-     * UserDetailsService bean - tells Spring Security how to find users.
-     * When someone tries to log in with "patient@test.com",
-     * Spring Security calls this to load that user from the database.
-     * @return UserDetailsService implementation
-     */
     @Bean
     public UserDetailsService userDetailsService() {
         return username -> userRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
-    /**
-     * PasswordEncoder bean - BCrypt hashing algorithm.
-     * BCrypt automatically:
-     * - Generates a salt
-     * - Hashes the password multiple times
-     * - Makes brute-force attacks extremely difficult
-     * When you save: "password123" → "$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy"
-     * When you check: BCrypt verifies without needing to decrypt
-     *
-     * @return BCrypt password encoder
-     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    /**
-     * AuthenticationProvider - configures how authentication works.
-     * Uses:
-     * - UserDetailsService to load users
-     * - PasswordEncoder to verify passwords
-     * @return configured authentication provider
-     */
     @Bean
     @SuppressWarnings("deprecation")
     public AuthenticationProvider authenticationProvider() {
@@ -71,15 +47,6 @@ public class ApplicationConfig {
         return authProvider;
     }
 
-    /**
-     * AuthenticationManager - the entry point for authentication.
-     * authenticationManager.authenticate(
-     *     new UsernamePasswordAuthenticationToken(email, password)
-     * )
-     * @param config Spring's authentication configuration
-     * @return authentication manager
-     * @throws Exception if configuration fails
-     */
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();

@@ -26,25 +26,7 @@ public class PrescriptionController {
 
     private final PrescriptionService prescriptionService;
 
-    /**
-     * Add a prescription to a medical record.
-     * POST /api/medical-records/{id}/prescriptions
-     * Authorization: Bearer <doctor_token>
-     * Content-Type: application/json
-     * Request body:
-     * {
-     *   "medicationName": "Amoxicillin",
-     *   "dosage": "500mg",
-     *   "frequency": "3 times daily",
-     *   "duration": "7 days",
-     *   "instructions": "Take with food"
-     * }
-     *
-     * @param id medical record ID
-     * @param authentication Spring Security authentication
-     * @param request prescription details
-     * @return created prescription
-     */
+    // Add a prescription to a medical record.
     @PostMapping("/{id}/prescriptions")
     @PreAuthorize("hasRole('DOCTOR')")
     public ResponseEntity<PrescriptionDTO> addPrescription(
@@ -57,14 +39,7 @@ public class PrescriptionController {
         return ResponseEntity.status(HttpStatus.CREATED).body(prescription);
     }
 
-    /**
-     * Get all prescriptions for a medical record.
-     * GET /api/medical-records/{id}/prescriptions
-     * Authorization: Bearer <token>
-     *
-     * @param id medical record ID
-     * @return list of prescriptions
-     */
+    // Get all prescriptions for a medical record.
     @GetMapping("/{id}/prescriptions")
     @PreAuthorize("hasAnyRole('PATIENT', 'DOCTOR')")
     public ResponseEntity<List<PrescriptionDTO>> getPrescriptions(@PathVariable Long id) {

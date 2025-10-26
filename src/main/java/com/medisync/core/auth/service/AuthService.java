@@ -38,14 +38,9 @@ public class AuthService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    /**
-     * Register a new user.
-     * @param request registration details (email, password, role)
-     * @return authentication response with JWT token
-     * @throws UserAlreadyExistsException if email is already registered
-     */
+    // Register a new user
     public AuthResponse register(RegisterRequest request) {
-        // Check if user already exists
+
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new UserAlreadyExistsException(
                     "User with email " + request.getEmail() + " already exists"
@@ -70,7 +65,6 @@ public class AuthService {
                     .isActive(true)
                     .build();
         } else {
-            // For ADMIN, NURSE - create base User
             user = User.builder()
                     .email(request.getEmail())
                     .password(passwordEncoder.encode(request.getPassword()))
@@ -79,7 +73,6 @@ public class AuthService {
                     .build();
         }
 
-        // Save to database
         userRepository.save(user);
 
         var jwtToken = jwtService.generateToken(user);
@@ -90,12 +83,7 @@ public class AuthService {
                 .build();
     }
 
-    /**
-     * Authenticate and login a user.
-     * @param request login credentials (email, password)
-     * @return authentication response with JWT token
-     * @throws InvalidCredentialsException if email doesn't exist or password is wrong
-     */
+    // Authenticate user and generate JWT token
     public AuthResponse login(LoginRequest request) {
         try {
             // Authenticate user
@@ -106,19 +94,14 @@ public class AuthService {
                     )
             );
         } catch (Exception e) {
-            // For security: don't reveal if email exists or password is wrong
             throw new InvalidCredentialsException("Invalid email or password");
         }
 
-        // Authentication was successful
-        // Load the user from database
         var user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new InvalidCredentialsException("Invalid email or password"));
 
-        // Generate JWT token
         var jwtToken = jwtService.generateToken(user);
 
-        // Return response
         return AuthResponse.builder()
                 .token(jwtToken)
                 .email(user.getEmail())

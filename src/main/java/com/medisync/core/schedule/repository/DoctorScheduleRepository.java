@@ -15,40 +15,16 @@ import java.util.Optional;
 @Repository
 public interface DoctorScheduleRepository extends JpaRepository<DoctorSchedule, Long> {
 
-    /**
-     * Find all schedules for a doctor by their email.
-     *
-     * @param email doctor's email
-     * @return list of schedules
-     */
+    // Find all schedules for a doctor by their email
     List<DoctorSchedule> findByDoctor_Email(String email);
 
-    /**
-     * Find all schedules for a doctor by their ID.
-     *
-     * @param doctorId doctor's ID
-     * @return list of schedules
-     */
+    // Find by ID
     List<DoctorSchedule> findByDoctor_Id(Long doctorId);
 
-    /**
-     * Find a schedule for a specific doctor on a specific day.
-     *
-     * @param doctorId doctor's ID
-     * @param dayOfWeek day of week
-     * @return optional schedule
-     */
+    // Find by day of the week
     Optional<DoctorSchedule> findByDoctor_IdAndDayOfWeek(Long doctorId, DayOfWeek dayOfWeek);
 
-    /**
-     * Find available schedules for a doctor on a specific day.
-     * (where isAvailable = true)
-     *
-     * @param doctorId doctor's ID
-     * @param dayOfWeek day of week
-     * @param isAvailable availability flag
-     * @return optional schedule
-     */
+    // Find by doctor ID, day of week, and availability
     Optional<DoctorSchedule> findByDoctor_IdAndDayOfWeekAndIsAvailable(
             Long doctorId,
             DayOfWeek dayOfWeek,

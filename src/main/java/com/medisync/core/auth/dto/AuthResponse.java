@@ -6,17 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * DTO for authentication responses.
- * This is what the user receives after successful login/registration:
- * {
- *   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
- *   "email": "patient@test.com",
- *   "role": "PATIENT"
- * }
- * The user will include this token in all future requests in the Authorization header:
- * Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
- */
+// DTO for authentication responses.
 @Data
 @Builder
 @NoArgsConstructor

@@ -32,33 +32,7 @@ public class DoctorScheduleController {
 
     private final SchedulingService schedulingService;
 
-    /**
-     * Create a work schedule for the current doctor.
-     * POST /api/doctors/schedule
-     * Authorization: Bearer <doctor_token>
-     * Content-Type: application/json
-     * Request body:
-     * {
-     *   "dayOfWeek": "MONDAY",
-     *   "startTime": "09:00",
-     *   "endTime": "17:00",
-     *   "slotDuration": 30
-     * }
-     * Response (201 CREATED):
-     * {
-     *   "id": 1,
-     *   "dayOfWeek": "MONDAY",
-     *   "startTime": "09:00",
-     *   "endTime": "17:00",
-     *   "slotDuration": 30,
-     *   "isAvailable": true,
-     *   ...
-     * }
-     *
-     * @param authentication Spring Security authentication object
-     * @param request schedule details
-     * @return created schedule
-     */
+    // Create a new schedule for the current doctor
     @PostMapping("/api/doctors/schedule")
     @PreAuthorize("hasRole('DOCTOR')")
     public ResponseEntity<DoctorScheduleDTO> createSchedule(
@@ -70,25 +44,7 @@ public class DoctorScheduleController {
         return ResponseEntity.status(HttpStatus.CREATED).body(schedule);
     }
 
-    /**
-     * Get all schedules for the current doctor.
-     * GET /api/doctors/schedule
-     * Authorization: Bearer <doctor_token>
-     * Response (200 OK):
-     * [
-     *   {
-     *     "id": 1,
-     *     "dayOfWeek": "MONDAY",
-     *     "startTime": "09:00",
-     *     "endTime": "17:00",
-     *     ...
-     *   },
-     *   ...
-     * ]
-     *
-     * @param authentication Spring Security authentication object
-     * @return list of schedules
-     */
+    // Get all schedules for the current doctor
     @GetMapping("/api/doctors/schedule")
     @PreAuthorize("hasRole('DOCTOR')")
     public ResponseEntity<List<DoctorScheduleDTO>> getMySchedules(Authentication authentication) {
@@ -97,15 +53,7 @@ public class DoctorScheduleController {
         return ResponseEntity.ok(schedules);
     }
 
-    /**
-     * Delete a schedule.
-     * DELETE /api/doctors/schedule/{id}
-     * Authorization: Bearer <doctor_token>
-     * Response (204 NO CONTENT)
-     *
-     * @param id schedule ID
-     * @param authentication Spring Security authentication object
-     */
+    // Delete a schedule for the current doctor
     @DeleteMapping("/api/doctors/schedule/{id}")
     @PreAuthorize("hasRole('DOCTOR')")
     public ResponseEntity<Void> deleteSchedule(
@@ -117,28 +65,7 @@ public class DoctorScheduleController {
         return ResponseEntity.noContent().build();
     }
 
-    /**
-     * Get available time slots for a specific doctor on a specific date.
-     * GET /api/doctors/{doctorId}/available-slots?date=2025-10-15
-     * Response (200 OK):
-     * [
-     *   {
-     *     "startTime": "09:00",
-     *     "endTime": "09:30",
-     *     "isAvailable": true
-     *   },
-     *   {
-     *     "startTime": "09:30",
-     *     "endTime": "10:00",
-     *     "isAvailable": false
-     *   },
-     *   ...
-     * ]
-     *
-     * @param doctorId doctor's ID
-     * @param date the date to check (format: yyyy-MM-dd)
-     * @return list of time slots with availability
-     */
+    // Get available slots for a doctor
     @GetMapping("/api/doctors/{doctorId}/available-slots")
     public ResponseEntity<List<AvailableSlotDTO>> getAvailableSlots(
             @PathVariable Long doctorId,
@@ -148,10 +75,7 @@ public class DoctorScheduleController {
         return ResponseEntity.ok(slots);
     }
 
-    /**
-     * Get doctor's schedule (public endpoint for patients to see working days).
-     * GET /api/doctors/{doctorId}/schedule
-     */
+    // Get a doctor's schedule by ID
     @GetMapping("/api/doctors/{doctorId}/schedule")
     public ResponseEntity<List<DoctorScheduleDTO>> getDoctorSchedule(@PathVariable Long doctorId) {
         List<DoctorSchedule> schedules = schedulingService.getDoctorSchedulesByDoctorId(doctorId);

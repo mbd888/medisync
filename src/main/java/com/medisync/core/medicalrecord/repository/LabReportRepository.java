@@ -12,11 +12,5 @@ import java.util.List;
 @Repository
 public interface LabReportRepository extends JpaRepository<LabReport, Long> {
 
-    /**
-     * Find all lab reports for a specific medical record.
-     *
-     * @param medicalRecordId medical record ID
-     * @return list of lab reports
-     */
     List<LabReport> findByMedicalRecord_Id(Long medicalRecordId);
 }

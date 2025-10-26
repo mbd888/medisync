@@ -13,12 +13,6 @@ import java.time.LocalDate;
 /**
  * Patient entity extending User.
  * Represents a patient in the healthcare system with medical information.
- * Stored in the same 'users' table using Single Table Inheritance.
- * Medical fields:
- * - Personal: firstName, lastName, dateOfBirth, gender, phone, address
- * - Medical: bloodType, allergies
- * - Emergency: emergencyContactName, emergencyContactPhone
- * - Insurance: insuranceProvider, insurancePolicyNumber
  */
 @Data
 @SuperBuilder
@@ -39,7 +33,7 @@ public class Patient extends User {
     private LocalDate dateOfBirth;
 
     @Column(length = 10)
-    private String gender; // MALE, FEMALE, OTHER
+    private String gender;
 
     @Column(length = 20)
     private String phone;
@@ -48,10 +42,10 @@ public class Patient extends User {
     private String address;
 
     @Column(name = "blood_type", length = 5)
-    private String bloodType; // A+, A-, B+, B-, AB+, AB-, O+, O-
+    private String bloodType;
 
     @Column(length = 500)
-    private String allergies; // Comma-separated or text description
+    private String allergies;
 
     @Column(name = "emergency_contact_name", length = 100)
     private String emergencyContactName;

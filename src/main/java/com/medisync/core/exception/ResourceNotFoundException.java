@@ -8,10 +8,6 @@ package com.medisync.core.exception;
  * - Appointment not found
  * - Medical record not found
  * Returns 404 NOT FOUND status.
- * Usage:
- * if (patient not found) {
- *     throw new ResourceNotFoundException("Patient not found with email: " + email);
- * }
  */
 public class ResourceNotFoundException extends RuntimeException {
 

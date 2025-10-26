@@ -16,10 +16,7 @@ import java.time.LocalTime;
 
 /**
  * DoctorSchedule entity representing a doctor's working schedule for a specific day.
- * Example:
- * Dr. Smith works Monday 9:00 AM-5:00 PM with 30-minute appointment slots.
  * A doctor can have multiple schedules (one per day of week).
- * Each schedule defines working hours and slot duration.
  */
 @Data
 @Builder

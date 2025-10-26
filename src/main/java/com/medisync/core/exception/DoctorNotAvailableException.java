@@ -7,10 +7,6 @@ package com.medisync.core.exception;
  * - Time is outside doctor's working hours
  * - Doctor marked that day as unavailable (time off)
  * Returns 400 BAD REQUEST status.
- * Usage:
- * if (doctor not working at this time) {
- *     throw new DoctorNotAvailableException("Doctor is not available at this time");
- * }
  */
 public class DoctorNotAvailableException extends RuntimeException {
 

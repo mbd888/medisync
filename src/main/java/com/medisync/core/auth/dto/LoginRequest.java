@@ -7,14 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * DTO for login requests.
- * This is what the user sends when logging in:
- * {
- *   "email": "patient@test.com",
- *   "password": "password123"
- * }
- */
+// DTO for login requests.
 @Data
 @Builder
 @NoArgsConstructor

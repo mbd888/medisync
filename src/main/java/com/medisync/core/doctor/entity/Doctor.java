@@ -8,15 +8,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-/**
- * Doctor entity extending User.
- * Represents a doctor in the healthcare system with professional information.
- * Stored in the same 'users' table using Single Table Inheritance.
- * Professional fields:
- * - Personal: firstName, lastName, phone
- * - Professional: specialization, licenseNumber, qualification, yearsOfExperience
- * - Bio: Short description about the doctor
- */
+// Doctor entity
 @Data
 @SuperBuilder
 @NoArgsConstructor

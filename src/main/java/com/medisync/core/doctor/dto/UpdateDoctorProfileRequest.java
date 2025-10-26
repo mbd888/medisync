@@ -8,13 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * DTO for updating doctor profile.
- * Doctor sends this when updating their profile:
- * PUT /api/doctors/profile
- * All fields are optional - doctor can update only what they want.
- * Validation ensures data quality when provided.
- */
+// DTO for updating doctor profile.
 @Data
 @Builder
 @NoArgsConstructor

@@ -9,26 +9,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * Service for doctor profile operations.
- * Handles:
- * - Getting doctor profile by email
- * - Updating doctor profile
- * - Converting between Entity and DTO
- */
+// Service for doctor's profile operations
 @Service
 @RequiredArgsConstructor
 public class DoctorService {
 
     private final DoctorRepository doctorRepository;
 
-    /**
-     * Get doctor profile by email.
-     *
-     * @param email doctor's email
-     * @return doctor profile DTO
-     * @throws ResourceNotFoundException if doctor not found
-     */
     @Transactional(readOnly = true)
     public DoctorProfileDTO getProfile(String email) {
         Doctor doctor = doctorRepository.findByEmail(email)
@@ -39,16 +26,6 @@ public class DoctorService {
         return mapToDTO(doctor);
     }
 
-    /**
-     * Update doctor profile.
-     * Only updates fields that are not null in the request.
-     * This allows partial updates.
-     *
-     * @param email doctor's email
-     * @param request update request with new values
-     * @return updated doctor profile DTO
-     * @throws ResourceNotFoundException if doctor not found
-     */
     @Transactional
     public DoctorProfileDTO updateProfile(String email, UpdateDoctorProfileRequest request) {
         Doctor doctor = doctorRepository.findByEmail(email)
@@ -56,7 +33,6 @@ public class DoctorService {
                         "Doctor not found with email: " + email
                 ));
 
-        // Update only non-null fields (partial update)
         if (request.getFirstName() != null) {
             doctor.setFirstName(request.getFirstName());
         }
@@ -82,17 +58,10 @@ public class DoctorService {
             doctor.setBio(request.getBio());
         }
 
-        // Save and return updated profile
         Doctor updatedDoctor = doctorRepository.save(doctor);
         return mapToDTO(updatedDoctor);
     }
 
-    /**
-     * Convert Doctor entity to DoctorProfileDTO.
-     *
-     * @param doctor doctor entity
-     * @return doctor profile DTO
-     */
     private DoctorProfileDTO mapToDTO(Doctor doctor) {
         return DoctorProfileDTO.builder()
                 .id(doctor.getId())

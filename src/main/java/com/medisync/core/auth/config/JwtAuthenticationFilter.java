@@ -1,11 +1,13 @@
 package com.medisync.core.auth.config;
 
 import com.medisync.core.auth.service.JwtService;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,20 +19,9 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-/**
- * JWT Authentication Filter
- * 1. Extracts JWT token from Authorization header
- * 2. Validates the token
- * 3. Loads the user from database
- * 4. Sets authentication in SecurityContext
- * Flow:
- * Request → Filter checks token → If valid, set authentication → Continue to Controller
- *                               → If invalid, return 401
- * Authorization header format:
- * Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
- */
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
@@ -57,37 +48,46 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         // 2. Extract JWT token (remove "Bearer " prefix)
         jwt = authHeader.substring(7);
 
-        // 3. Extract email from token
-        userEmail = jwtService.extractUsername(jwt);
+        try {
+            // 3. Extract email from token
+            userEmail = jwtService.extractUsername(jwt);
 
-        // 4. If email exists and user is not already authenticated
-        if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            // 4. If email exists and user is not already authenticated
+            if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
-            // Load user details from database
-            UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
+                // Load user details from database
+                UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
 
-            // 5. Validate token
-            if (jwtService.isTokenValid(jwt, userDetails)) {
+                // 5. Validate token
+                if (jwtService.isTokenValid(jwt, userDetails)) {
 
-                // Create authentication token
-                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                        userDetails,
-                        null,
-                        userDetails.getAuthorities()
-                );
+                    // Create authentication token
+                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                            userDetails,
+                            null,
+                            userDetails.getAuthorities()
+                    );
 
-                // Set additional details
-                authToken.setDetails(
-                        new WebAuthenticationDetailsSource().buildDetails(request)
-                );
+                    // Set additional details
+                    authToken.setDetails(
+                            new WebAuthenticationDetailsSource().buildDetails(request)
+                    );
 
-                // 6. Set authentication in SecurityContext
-                // This tells Spring Security: "This user is authenticated"
-                SecurityContextHolder.getContext().setAuthentication(authToken);
+                    // 6. Set authentication in SecurityContext
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                }
             }
+        } catch (ExpiredJwtException e) {
+            // Token has expired - log and continue without authentication
+            log.warn("JWT token expired: {}", e.getMessage());
+            // User will be treated as unauthenticated
+        } catch (Exception e) {
+            // Other JWT parsing errors (malformed, invalid signature, etc.)
+            log.error("JWT token parsing error: {}", e.getMessage());
+            // User will be treated as unauthenticated
         }
 
-        // 7. Continue the filter chain (pass request to next filter/controller)
+        // 7. Continue the filter chain
         filterChain.doFilter(request, response);
     }
 }

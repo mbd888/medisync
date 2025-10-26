@@ -14,14 +14,6 @@ import java.time.LocalTime;
 /**
  * DTO for booking a new appointment.
  * Patient sends this when booking:
- * POST /api/appointments
- * {
- *   "doctorId": 5,
- *   "appointmentDate": "2025-10-15",
- *   "startTime": "14:00",
- *   "reason": "Regular checkup"
- * }
- * Patient ID comes from JWT token (not in request body).
  */
 @Data
 @Builder

@@ -7,18 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * DTO for adding a prescription to a medical record.
- * Doctor sends this to prescribe medication:
- * POST /api/medical-records/{id}/prescriptions
- * {
- *   "medicationName": "Amoxicillin",
- *   "dosage": "500mg",
- *   "frequency": "3 times daily",
- *   "duration": "7 days",
- *   "instructions": "Take with food"
- * }
- */
+// DTO for adding prescriptions to a medical record.
 @Data
 @Builder
 @NoArgsConstructor

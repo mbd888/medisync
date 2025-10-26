@@ -10,12 +10,6 @@ import java.time.LocalTime;
 /**
  * DTO for available time slot information.
  * Used when showing patients which times are available for booking.
- * Example:
- * {
- *   "startTime": "14:00",
- *   "endTime": "14:30",
- *   "isAvailable": true
- * }
  */
 @Data
 @Builder
