@@ -37,7 +37,10 @@ export default function DoctorDashboard() {
                         <div className="text-4xl mb-4">📅</div>
                         <h3 className="text-xl font-semibold mb-2">My Appointments</h3>
                         <p className="text-gray-600 mb-4">View patient appointments</p>
-                        <button className="btn-primary w-full text-sm">
+                        <button
+                            onClick={() => navigate('/doctor/appointments')}
+                            className="btn-primary w-full text-sm"
+                        >
                             View Appointments
                         </button>
                     </div>
@@ -46,7 +49,10 @@ export default function DoctorDashboard() {
                         <div className="text-4xl mb-4">⏰</div>
                         <h3 className="text-xl font-semibold mb-2">My Schedule</h3>
                         <p className="text-gray-600 mb-4">Manage working hours</p>
-                        <button className="btn-primary w-full text-sm">
+                        <button
+                            onClick={() => navigate('/doctor/schedule')}
+                            className="btn-primary w-full text-sm"
+                        >
                             Manage Schedule
                         </button>
                     </div>
@@ -62,7 +68,7 @@ export default function DoctorDashboard() {
                 </div>
 
                 <div className="mt-8 card">
-                    <h3 className="text-xl font-semibold mb-4">✅ Authentication Working!</h3>
+                    <h3 className="text-xl font-semibold mb-4">Authentication Working!</h3>
                     <p className="text-gray-600">
                         You successfully logged in as a doctor. We'll build out the features next!
                     </p>

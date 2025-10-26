@@ -6,6 +6,8 @@ import PatientDashboard from './pages/patient/PatientDashboard';
 import DoctorDashboard from './pages/doctor/DoctorDashboard';
 import MyAppointments from './pages/patient/MyAppointments';
 import BookAppointment from './pages/patient/BookAppointment';
+import DoctorAppointments from './pages/doctor/DoctorAppointments';
+import ManageSchedule from './pages/doctor/ManageSchedule';
 
 // Protected Route component
 function ProtectedRoute({ children, allowedRole }) {
@@ -66,6 +68,22 @@ function App() {
                     element={
                         <ProtectedRoute allowedRole="DOCTOR">
                             <DoctorDashboard />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/doctor/appointments"
+                    element={
+                        <ProtectedRoute allowedRole="DOCTOR">
+                            <DoctorAppointments />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/doctor/schedule"
+                    element={
+                        <ProtectedRoute allowedRole="DOCTOR">
+                            <ManageSchedule />
                         </ProtectedRoute>
                     }
                 />

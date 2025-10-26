@@ -274,6 +274,13 @@ export default function BookAppointment() {
                                     className="input-field w-full"
                                     dateFormat="MMMM d, yyyy"
                                 />
+                                {formData.doctorId && doctorSchedule.length > 0 && (
+                                    <p className="text-sm text-gray-500 mt-2">
+                                        Available: {doctorSchedule.map(s =>
+                                        s.dayOfWeek.charAt(0) + s.dayOfWeek.slice(1).toLowerCase()
+                                    ).join(', ')}
+                                    </p>
+                                )}
                                 {formData.doctorId && doctorSchedule.length === 0 && (
                                     <p className="text-sm text-red-600 mt-2">
                                         This doctor has no schedule set yet
