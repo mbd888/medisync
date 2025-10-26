@@ -77,7 +77,7 @@ export default function MyAppointments() {
                         className="text-2xl font-bold text-primary-600 cursor-pointer"
                         onClick={() => navigate('/patient/dashboard')}
                     >
-                        🏥 MediSync
+                        MediSync
                     </h1>
                     <div className="flex items-center gap-4">
                         <span className="text-sm text-gray-600">{user?.email}</span>
@@ -150,7 +150,7 @@ export default function MyAppointments() {
 
                                         <div className="space-y-2 text-sm text-gray-700">
                                             <div className="flex items-center gap-2">
-                                                <span className="font-medium">📅 Date:</span>
+                                                <span className="font-medium">Date:</span>
                                                 <span>
                                                   {appointment.appointmentDate
                                                       ? new Date(appointment.appointmentDate + 'T12:00:00')
@@ -160,12 +160,12 @@ export default function MyAppointments() {
                                                 </span>
                                             </div>
                                             <div className="flex items-center gap-2">
-                                                <span className="font-medium">⏰ Time:</span>
+                                                <span className="font-medium">Time:</span>
                                                 <span>{formatTime12Hour(appointment.startTime)} - {formatTime12Hour(appointment.endTime)}</span>
                                             </div>
                                             {appointment.reason && (
                                                 <div className="flex items-center gap-2">
-                                                    <span className="font-medium">📝 Reason:</span>
+                                                    <span className="font-medium">Reason:</span>
                                                     <span>{appointment.reason}</span>
                                                 </div>
                                             )}

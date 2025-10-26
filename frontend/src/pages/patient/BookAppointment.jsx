@@ -148,7 +148,7 @@ export default function BookAppointment() {
                         className="text-2xl font-bold text-primary-600 cursor-pointer"
                         onClick={() => navigate('/patient/dashboard')}
                     >
-                        🏥 MediSync
+                        MediSync
                     </h1>
                     <div className="flex items-center gap-4">
                         <span className="text-sm text-gray-600">{user?.email}</span>
@@ -177,7 +177,7 @@ export default function BookAppointment() {
 
                 {success && (
                     <div className="card bg-green-50 text-green-800 mb-6">
-                        ✅ Appointment booked successfully! Redirecting...
+                        Appointment booked successfully! Redirecting...
                     </div>
                 )}
 
@@ -276,7 +276,7 @@ export default function BookAppointment() {
                                 />
                                 {formData.doctorId && doctorSchedule.length === 0 && (
                                     <p className="text-sm text-red-600 mt-2">
-                                        ⚠️ This doctor has no schedule set yet
+                                        This doctor has no schedule set yet
                                     </p>
                                 )}
                             </div>

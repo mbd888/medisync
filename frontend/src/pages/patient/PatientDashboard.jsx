@@ -14,7 +14,7 @@ export default function PatientDashboard() {
         <div className="min-h-screen bg-gray-50">
             <nav className="bg-white shadow-sm">
                 <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-                    <h1 className="text-2xl font-bold text-primary-600">🏥 MediSync</h1>
+                    <h1 className="text-2xl font-bold text-primary-600">MediSync</h1>
                     <div className="flex items-center gap-4">
                         <span className="text-sm text-gray-600">{user?.email}</span>
                         <button onClick={handleLogout} className="btn-secondary text-sm">
@@ -68,7 +68,7 @@ export default function PatientDashboard() {
                 </div>
 
                 <div className="mt-8 card">
-                    <h3 className="text-xl font-semibold mb-4">✅ Authentication Working!</h3>
+                    <h3 className="text-xl font-semibold mb-4">Authentication Working!</h3>
                     <p className="text-gray-600">
                         You successfully logged in as a patient. We'll build out the features next!
                     </p>
